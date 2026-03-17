@@ -37,25 +37,21 @@ st.markdown("""
     .big-header {
         font-size: 28px;
         font-weight: 700;
-        color: #f1f5f9;
+        color: #0f172a;
         letter-spacing: -0.02em;
         margin-bottom: 4px;
     }
     .sub-header {
         font-size: 14px;
-        color: #64748b;
+        color: #475569;
         margin-bottom: 24px;
     }
     .section-title {
         font-size: 18px;
         font-weight: 700;
-        color: #f1f5f9;
+        color: #1e293b;
         margin: 16px 0 10px 0;
     }
-
-    .comp-high { background: #FEE2E2; color: #991B1B; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
-    .comp-medium { background: #FEF3C7; color: #92400E; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
-    .comp-low { background: #D1FAE5; color: #065F46; padding: 2px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
 
     .ad-copy-box {
         background: #ffffff;
@@ -64,12 +60,6 @@ st.markdown("""
         margin-bottom: 16px;
         border: 1px solid #e2e8f0;
     }
-    .ad-url {
-        font-size: 13px;
-        color: #1a1a1a;
-        margin-bottom: 4px;
-    }
-    .ad-url b { font-weight: 600; }
     .ad-label {
         font-size: 11px;
         color: #5f6368;
@@ -79,14 +69,12 @@ st.markdown("""
         padding: 1px 6px;
         border-radius: 4px;
         margin-right: 6px;
-        margin-bottom: 4px;
     }
     .ad-headline {
         font-size: 18px;
         color: #1a0dab;
         font-weight: 400;
         margin-bottom: 4px;
-        cursor: pointer;
     }
     .ad-description {
         font-size: 13px;
@@ -98,7 +86,7 @@ st.markdown("""
 
 
 # ═══════════════════════════════════════════════════════
-# DATA — from the Excel file
+# DATA
 # ═══════════════════════════════════════════════════════
 
 # --- Campaign Report (Tab 1) ---
@@ -179,27 +167,6 @@ keyword_research_data = [
 
 
 # ═══════════════════════════════════════════════════════
-# HELPER FUNCTIONS
-# ═══════════════════════════════════════════════════════
-
-def fmt_pct(val):
-    if val is None: return "—"
-    return f"{val:.1%}"
-
-def fmt_dollar(val):
-    if val is None: return "—"
-    return f"${val:,.2f}"
-
-def fmt_num(val):
-    if val is None: return "—"
-    return f"{val:,}"
-
-def competition_badge(comp):
-    colors = {"High": "comp-high", "Medium": "comp-medium", "Low": "comp-low"}
-    return f'<span class="{colors.get(comp, "comp-medium")}">{comp}</span>'
-
-
-# ═══════════════════════════════════════════════════════
 # HEADER
 # ═══════════════════════════════════════════════════════
 
@@ -221,8 +188,6 @@ tab1, tab2, tab3, tab4 = st.tabs([
 
 # ─── TAB 1: Campaign Report ───
 with tab1:
-
-    # --- Overall Summary Metrics ---
     st.markdown('<div class="section-title">Campaign Overview</div>', unsafe_allow_html=True)
 
     total_budget = sum(c["Budget"] for c in campaign_data)
@@ -244,7 +209,6 @@ with tab1:
 
     st.markdown("")
 
-    # --- Campaign Report Table ---
     st.markdown('<div class="section-title">Campaign Report</div>', unsafe_allow_html=True)
 
     df_campaign = pd.DataFrame(campaign_data)
@@ -267,7 +231,6 @@ with tab1:
 
     st.markdown("")
 
-    # --- Ad Group Report Table ---
     st.markdown('<div class="section-title">Ad Group Report</div>', unsafe_allow_html=True)
 
     df_adgroup = pd.DataFrame(adgroup_data)
@@ -288,7 +251,6 @@ with tab1:
     })
     st.dataframe(df_adgroup_display, use_container_width=True, hide_index=True)
 
-    # --- Glossary ---
     st.markdown("")
     st.markdown('<div class="section-title">Metric Definitions</div>', unsafe_allow_html=True)
 
@@ -316,7 +278,6 @@ with tab2:
     st.markdown("This report shows the performance of each keyword in the floral ties ad group.")
     st.markdown("")
 
-    # Summary metrics for keyword report
     kr_impressions = sum(k["Impressions"] for k in keyword_report_data)
     kr_clicks = sum(k["Clicks"] for k in keyword_report_data)
     kr_cost = sum(k["Total Cost"] for k in keyword_report_data)
@@ -355,7 +316,6 @@ with tab2:
     })
     st.dataframe(df_kr_display, use_container_width=True, hide_index=True, height=580)
 
-    # Definitions for keyword report
     st.markdown("")
     st.markdown('<div class="section-title">Metric Definitions</div>', unsafe_allow_html=True)
     kr_definitions = {
@@ -396,7 +356,6 @@ with tab3:
 
     st.markdown("")
 
-    # Discussion questions from Excel
     st.markdown('<div class="section-title">Discussion Questions</div>', unsafe_allow_html=True)
     st.info("**Which keywords will yield more impressions?**\n\nConsider both the monthly search volume and the competition level.")
     st.info("**Which keywords will yield higher conversion rates?**\n\nThink about search intent — keywords indicating purchase intent (e.g., 'floral tie for sale') tend to convert better than informational queries (e.g., 'how to tie a tie').")
@@ -419,7 +378,6 @@ with tab4:
     st.markdown(f"**Landing page:** [www.daziusa.com/collections/floral](https://www.daziusa.com/collections/floral)")
     st.markdown("")
 
-    # Ad copy examples
     st.markdown('<div class="section-title">Ad Copy Examples</div>', unsafe_allow_html=True)
 
     col_ad1, col_ad2 = st.columns(2)
@@ -427,7 +385,7 @@ with tab4:
     with col_ad1:
         st.markdown("""
         <div class="ad-copy-box">
-            <div><span class="ad-label">Ad</span> <span class="ad-url">https://www.daziusa.com/neckties/floral</span></div>
+            <div><span class="ad-label">Ad</span> <span style="font-size:13px; color:#1a1a1a;">https://www.daziusa.com/neckties/floral</span></div>
             <div class="ad-headline">Shop Floral Ties For Weddings - Free Shipping On Orders $40+</div>
             <div class="ad-description">Browse Our Original <b>Floral Ties</b>, <b>Floral</b> Bow <b>Ties</b>, And Other Essentials. Shop DAZI® Today! Free Shipping Over $40. Best Quality. Great For <b>Weddings</b>. Styles: White <b>Floral</b>, Blue Bloom.</div>
         </div>
@@ -436,7 +394,7 @@ with tab4:
     with col_ad2:
         st.markdown("""
         <div class="ad-copy-box">
-            <div><span class="ad-label">Ad</span> <span class="ad-url">https://www.daziusa.com/neckties/floral</span></div>
+            <div><span class="ad-label">Ad</span> <span style="font-size:13px; color:#1a1a1a;">https://www.daziusa.com/neckties/floral</span></div>
             <div class="ad-headline">Shop Floral Ties - DAZI® Original Floral Ties - daziusa.com</div>
             <div class="ad-description">Browse Our Original <b>Floral Ties</b>, <b>Floral</b> Bow <b>Ties</b>, And More. Shop & Save Today! Best Quality.</div>
         </div>
@@ -444,7 +402,6 @@ with tab4:
 
     st.markdown("")
 
-    # Landing page preview
     st.markdown('<div class="section-title">Landing Page Preview</div>', unsafe_allow_html=True)
     st.markdown("The ads direct users to the DAZI floral ties collection page:")
     st.markdown("")
