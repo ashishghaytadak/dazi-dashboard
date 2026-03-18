@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 st.set_page_config(page_title="DAZI Paid Search Dashboard", page_icon="📊", layout="wide")
 
@@ -28,31 +29,48 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ═══════════════════════════════════════════════════════
-# HELPER: Convert Competition text to number for sorting
-# High=3, Medium=2, Low=1 so descending = High first
-# ═══════════════════════════════════════════════════════
 COMP_MAP = {"High": 3, "Medium": 2, "Low": 1}
 COMP_REVERSE = {3: "High", 2: "Medium", 1: "Low"}
+
+# Helper: format dollar or return "-"
+def fmt_dollar(x):
+    if x is None or (isinstance(x, float) and (np.isnan(x) or x == 0)):
+        return "-"
+    return f"${x:.2f}"
+
+def fmt_dollar1(x):
+    if x is None or (isinstance(x, float) and (np.isnan(x) or x == 0)):
+        return "-"
+    return f"${x:.1f}"
+
+def fmt_pct(x):
+    if x is None or (isinstance(x, float) and (np.isnan(x) or x == 0)):
+        return "-"
+    return f"{x:.1%}"
+
+def fmt_pct0(x):
+    if x is None or (isinstance(x, float) and (np.isnan(x) or x == 0)):
+        return "-"
+    return f"{x:.0%}"
 
 # ═══════════════════════════════════════════════════════
 # DATA
 # ═══════════════════════════════════════════════════════
 
 campaign_data = pd.DataFrame([
-    {"Campaign": "Homepage", "Budget": 1000, "Impressions": 12133, "Top Imp. Rate": 0.94, "Clicks": 689, "Avg CPC": 0.63, "Total Cost": 434.07, "CTR": 0.0568, "Conversions": 42, "Conv. Rate": 0.0610, "Margin/Conv": 15, "CPA": 10.33, "ROAS": 0.4514},
-    {"Campaign": "Floral tie", "Budget": 2000, "Impressions": 33485, "Top Imp. Rate": 0.88, "Clicks": 1110, "Avg CPC": 1.48, "Total Cost": 1642.80, "CTR": 0.0331, "Conversions": 101, "Conv. Rate": 0.0910, "Margin/Conv": 18, "CPA": 16.27, "ROAS": 0.1066},
-    {"Campaign": "Classic tie", "Budget": 2000, "Impressions": 61263, "Top Imp. Rate": 0.57, "Clicks": 890, "Avg CPC": 1.70, "Total Cost": 1513.00, "CTR": 0.0145, "Conversions": 45, "Conv. Rate": 0.0506, "Margin/Conv": 16, "CPA": 33.62, "ROAS": -0.5241},
-    {"Campaign": "Wedding tie", "Budget": 2000, "Impressions": 47528, "Top Imp. Rate": 0.34, "Clicks": 495, "Avg CPC": 4.00, "Total Cost": 1980.00, "CTR": 0.0104, "Conversions": 58, "Conv. Rate": 0.1172, "Margin/Conv": 75, "CPA": 34.14, "ROAS": 1.1970},
+    {"Campaign": "Homepage", "Budget": 1000, "Impressions": 12133, "Top Imp. Rate": 0.94, "Clicks": 689, "Avg CPC": 0.63, "Total Cost": 434.07, "CTR": 0.0568, "Conversions": 42, "Conv. Rate": 0.0610, "Margin/Conv": 15, "CPA": 10.33, "POAS": 0.4514},
+    {"Campaign": "Floral tie", "Budget": 2000, "Impressions": 33485, "Top Imp. Rate": 0.88, "Clicks": 1110, "Avg CPC": 1.48, "Total Cost": 1642.80, "CTR": 0.0331, "Conversions": 101, "Conv. Rate": 0.0910, "Margin/Conv": 18, "CPA": 16.27, "POAS": 0.1066},
+    {"Campaign": "Classic tie", "Budget": 2000, "Impressions": 61263, "Top Imp. Rate": 0.57, "Clicks": 890, "Avg CPC": 1.70, "Total Cost": 1513.00, "CTR": 0.0145, "Conversions": 45, "Conv. Rate": 0.0506, "Margin/Conv": 16, "CPA": 33.62, "POAS": -0.5241},
+    {"Campaign": "Wedding tie", "Budget": 2000, "Impressions": 47528, "Top Imp. Rate": 0.34, "Clicks": 495, "Avg CPC": 4.00, "Total Cost": 1980.00, "CTR": 0.0104, "Conversions": 58, "Conv. Rate": 0.1172, "Margin/Conv": 75, "CPA": 34.14, "POAS": 1.1970},
 ])
 
 adgroup_data = pd.DataFrame([
-    {"Campaign": "Homepage", "Ad Group": "Homepage", "Impressions": 12133, "Top Imp. Rate": 1.50, "Clicks": 689, "Avg CPC": 0.63, "Total Cost": 434.07, "CTR": 0.0568, "Conversions": 42, "Conv. Rate": 0.0610, "Margin/Conv": 15, "CPA": 10.33, "ROAS": 0.4514},
-    {"Campaign": "Floral tie", "Ad Group": "Floral tie collection", "Impressions": 26619, "Top Imp. Rate": 3.70, "Clicks": 794, "Avg CPC": 1.408, "Total Cost": 1117.75, "CTR": 0.0298, "Conversions": 72, "Conv. Rate": 0.0907, "Margin/Conv": 18, "CPA": 15.52, "ROAS": 0.1595},
-    {"Campaign": "Floral tie", "Ad Group": "Floral bow tie collection", "Impressions": 6866, "Top Imp. Rate": 1.50, "Clicks": 316, "Avg CPC": 1.52, "Total Cost": 480.32, "CTR": 0.0460, "Conversions": 29, "Conv. Rate": 0.0918, "Margin/Conv": 18, "CPA": 16.56, "ROAS": 0.0868},
-    {"Campaign": "Classic tie", "Ad Group": "Skinny tie", "Impressions": 45301, "Top Imp. Rate": 2.80, "Clicks": 687, "Avg CPC": 1.01, "Total Cost": 693.87, "CTR": 0.0152, "Conversions": 32, "Conv. Rate": 0.0466, "Margin/Conv": 16, "CPA": 21.68, "ROAS": -0.2621},
-    {"Campaign": "Classic tie", "Ad Group": "Dotted navy tie", "Impressions": 15962, "Top Imp. Rate": 2.30, "Clicks": 203, "Avg CPC": 0.82, "Total Cost": 166.46, "CTR": 0.0127, "Conversions": 13, "Conv. Rate": 0.0640, "Margin/Conv": 16, "CPA": 12.80, "ROAS": 0.2495},
-    {"Campaign": "Wedding tie", "Ad Group": "Wedding tie", "Impressions": 47528, "Top Imp. Rate": 4.10, "Clicks": 495, "Avg CPC": 4.00, "Total Cost": 1980.00, "CTR": 0.0104, "Conversions": 58, "Conv. Rate": 0.1172, "Margin/Conv": 75, "CPA": 34.14, "ROAS": 1.1970},
+    {"Campaign": "Homepage", "Ad Group": "Homepage", "Impressions": 12133, "Top Imp. Rate": 1.50, "Clicks": 689, "Avg CPC": 0.63, "Total Cost": 434.07, "CTR": 0.0568, "Conversions": 42, "Conv. Rate": 0.0610, "Margin/Conv": 15, "CPA": 10.33, "POAS": 0.4514},
+    {"Campaign": "Floral tie", "Ad Group": "Floral tie collection", "Impressions": 26619, "Top Imp. Rate": 3.70, "Clicks": 794, "Avg CPC": 1.408, "Total Cost": 1117.75, "CTR": 0.0298, "Conversions": 72, "Conv. Rate": 0.0907, "Margin/Conv": 18, "CPA": 15.52, "POAS": 0.1595},
+    {"Campaign": "Floral tie", "Ad Group": "Floral bow tie collection", "Impressions": 6866, "Top Imp. Rate": 1.50, "Clicks": 316, "Avg CPC": 1.52, "Total Cost": 480.32, "CTR": 0.0460, "Conversions": 29, "Conv. Rate": 0.0918, "Margin/Conv": 18, "CPA": 16.56, "POAS": 0.0868},
+    {"Campaign": "Classic tie", "Ad Group": "Skinny tie", "Impressions": 45301, "Top Imp. Rate": 2.80, "Clicks": 687, "Avg CPC": 1.01, "Total Cost": 693.87, "CTR": 0.0152, "Conversions": 32, "Conv. Rate": 0.0466, "Margin/Conv": 16, "CPA": 21.68, "POAS": -0.2621},
+    {"Campaign": "Classic tie", "Ad Group": "Dotted navy tie", "Impressions": 15962, "Top Imp. Rate": 2.30, "Clicks": 203, "Avg CPC": 0.82, "Total Cost": 166.46, "CTR": 0.0127, "Conversions": 13, "Conv. Rate": 0.0640, "Margin/Conv": 16, "CPA": 12.80, "POAS": 0.2495},
+    {"Campaign": "Wedding tie", "Ad Group": "Wedding tie", "Impressions": 47528, "Top Imp. Rate": 4.10, "Clicks": 495, "Avg CPC": 4.00, "Total Cost": 1980.00, "CTR": 0.0104, "Conversions": 58, "Conv. Rate": 0.1172, "Margin/Conv": 75, "CPA": 34.14, "POAS": 1.1970},
 ])
 
 keyword_report_data = pd.DataFrame([
@@ -63,18 +81,21 @@ keyword_report_data = pd.DataFrame([
     {"Keyword": "floral necktie", "Competition": 3, "Top Bid": 1.88, "Avg Monthly": 8700, "CPC Bid": 2.10, "Quality Score": 9, "Impressions": 3976, "Top Imp. Rate": 0.724, "Clicks": 138, "CTR": 0.0347, "Avg CPC": 2.10, "Total Cost": 289.80, "Conversions": 23, "Conv. Rate": 0.1667, "CPA": 12.60},
     {"Keyword": "pink floral tie", "Competition": 3, "Top Bid": 1.30, "Avg Monthly": 8500, "CPC Bid": 1.50, "Quality Score": 10, "Impressions": 4458, "Top Imp. Rate": 0.831, "Clicks": 533, "CTR": 0.1196, "Avg CPC": 1.50, "Total Cost": 799.50, "Conversions": 178, "Conv. Rate": 0.3340, "CPA": 4.49},
     {"Keyword": "blue floral tie", "Competition": 3, "Top Bid": 0.95, "Avg Monthly": 7500, "CPC Bid": 1.20, "Quality Score": 10, "Impressions": 4306, "Top Imp. Rate": 0.909, "Clicks": 564, "CTR": 0.1310, "Avg CPC": 1.20, "Total Cost": 676.80, "Conversions": 141, "Conv. Rate": 0.2500, "CPA": 4.80},
-    {"Keyword": "tie for blue suit", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 0.600, "Clicks": 5, "CTR": 0.0135, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "tie for blue suit", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 0.600, "Clicks": 5, "CTR": 0.0135, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": None, "CPA": None},
     {"Keyword": "floral tie for sale", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 880, "CPC Bid": 2.60, "Quality Score": 9, "Impressions": 390, "Top Imp. Rate": 0.702, "Clicks": 13, "CTR": 0.0333, "Avg CPC": 2.60, "Total Cost": 33.80, "Conversions": 6, "Conv. Rate": 0.4615, "CPA": 5.63},
-    {"Keyword": "black and white floral tie", "Competition": 3, "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 0.610, "Clicks": 1, "CTR": 0.0217, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "unique floral tie", "Competition": 2, "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 0.758, "Clicks": 12, "CTR": 0.0448, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "red tie with black suit", "Competition": 2, "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 0.495, "Clicks": 2, "CTR": 0.0145, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 0.446, "Clicks": 1, "CTR": 0.0081, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "black and white floral tie", "Competition": 3, "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 0.610, "Clicks": 1, "CTR": 0.0217, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "unique floral tie", "Competition": 2, "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 0.758, "Clicks": 12, "CTR": 0.0448, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "red tie with black suit", "Competition": 2, "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 0.495, "Clicks": 2, "CTR": 0.0145, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 0.446, "Clicks": 1, "CTR": 0.0081, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": None, "CPA": None},
     {"Keyword": "how to tie a tie", "Competition": 1, "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 0.648, "Clicks": 2863, "CTR": 0.0233, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": 0.0049, "CPA": 55.22},
     {"Keyword": "best tie knot", "Competition": 1, "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 0.480, "Clicks": 28, "CTR": 0.0171, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": 0.0357, "CPA": 2.80},
 ])
 
-# Map numeric competition back to text for display
 keyword_report_data["Competition"] = keyword_report_data["Competition"].map(COMP_REVERSE)
+
+# Format Conv. Rate and CPA as text to show "-" for None/0
+keyword_report_data["Conv. Rate"] = keyword_report_data["Conv. Rate"].apply(lambda x: f"{x:.1%}" if x is not None and x > 0 else "-")
+keyword_report_data["CPA"] = keyword_report_data["CPA"].apply(lambda x: f"${x:.1f}" if x is not None and x > 0 else "-")
 
 keyword_research_data = pd.DataFrame([
     {"Keyword": "necktie", "Competition": 3, "Top of Page Bid": 1.80, "Avg Monthly Searches": 100000},
@@ -139,7 +160,7 @@ with tab1:
             "Conv. Rate": st.column_config.NumberColumn(format="%.1f%%"),
             "Margin/Conv": st.column_config.NumberColumn(format="$%d"),
             "CPA": st.column_config.NumberColumn(format="$%.2f"),
-            "ROAS": st.column_config.NumberColumn(format="%.1f%%"),
+            "POAS": st.column_config.NumberColumn("POAS", format="%.1f%%"),
         })
     st.markdown("")
 
@@ -156,7 +177,7 @@ with tab1:
             "Conv. Rate": st.column_config.NumberColumn(format="%.1f%%"),
             "Margin/Conv": st.column_config.NumberColumn(format="$%d"),
             "CPA": st.column_config.NumberColumn(format="$%.2f"),
-            "ROAS": st.column_config.NumberColumn(format="%.0f%%"),
+            "POAS": st.column_config.NumberColumn("POAS", format="%.0f%%"),
         })
     st.markdown("")
 
@@ -172,7 +193,7 @@ with tab1:
         "Conversions": "The total number of desired actions (e.g., purchases, sign-ups) completed.",
         "Conversion Rate": "The percentage of users who take a desired action (Conversions / Clicks).",
         "CPA (Cost per Acquisition)": "The cost of acquiring a customer (Total Cost / Conversions).",
-        "ROAS (Return on Ad Spend)": "Measures how profitable the ad campaign is.",
+        "POAS (Profit on Ad Spend)": "Measures how profitable the ad campaign is. Calculated as (Margin per Conversion − CPA) ÷ CPA.",
     }.items():
         with st.expander(f"**{term}**"):
             st.markdown(defn)
@@ -212,8 +233,8 @@ with tab2:
             "Avg CPC": st.column_config.NumberColumn(format="$%.2f"),
             "Total Cost": st.column_config.NumberColumn(format="$%,.0f"),
             "Conversions": st.column_config.NumberColumn(format="%d"),
-            "Conv. Rate": st.column_config.NumberColumn(format="%.1f%%"),
-            "CPA": st.column_config.NumberColumn(format="$%.1f"),
+            "Conv. Rate": st.column_config.TextColumn(),
+            "CPA": st.column_config.TextColumn(),
         })
     st.markdown("")
 
@@ -293,7 +314,7 @@ with tab4:
             <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
                 <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #f5e6e0, #e8d5c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌸</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Quicksand Roses</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">68 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
                 <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0f0e0, #c8e8c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌿</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Hidden Garden</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">31 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
-                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0e5f0, #c8d5e8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">💐</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Scorpion Grass</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">31 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
+                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0e5f0, #c8d5e8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">💐</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Scorpion Grass</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">2 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
             </div>
         </div>
     </div>""", unsafe_allow_html=True)
