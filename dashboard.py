@@ -64,7 +64,7 @@ keyword_report_data = pd.DataFrame([
     {"Keyword": "tie and handkerchief set", "Competition": "Medium", "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 0.446, "Clicks": 1, "CTR": 0.0081, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
     {"Keyword": "how to tie a tie", "Competition": "Low", "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 0.648, "Clicks": 2863, "CTR": 0.0233, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": 0.0049, "CPA": 55.22},
     {"Keyword": "best tie knot", "Competition": "Low", "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 0.480, "Clicks": 28, "CTR": 0.0171, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": 0.0357, "CPA": 2.80},
-]
+])
 
 keyword_research_data = pd.DataFrame([
     {"Keyword": "necktie", "Competition": "High", "Top of Page Bid": 1.80, "Avg Monthly Searches": 100000},
