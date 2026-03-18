@@ -290,7 +290,7 @@ with tab1:
     st.dataframe(adgroup_data, use_container_width=True, hide_index=True,
         column_config={
             "Impressions": st.column_config.NumberColumn(format="%d"),
-            "Top Imp. Rate": st.column_config.NumberColumn(format="%.1f"),
+            "Top Imp. Rate": st.column_config.NumberColumn(format="%.1f%%"),
             "Clicks": st.column_config.NumberColumn(format="%d"),
             "Avg CPC": st.column_config.NumberColumn(format="$%.2f"),
             "Total Cost": st.column_config.NumberColumn(format="$%,.0f"),
