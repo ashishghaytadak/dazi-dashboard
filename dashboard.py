@@ -19,7 +19,9 @@ st.markdown("""
         margin: -1rem -1rem 24px -1rem;
         display: flex;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        flex-direction: column;
+        gap: 4px;
     }
     .google-ads-logo {
         font-family: 'Google Sans', sans-serif;
@@ -33,7 +35,7 @@ st.markdown("""
     .google-ads-subtitle {
         font-size: 13px;
         color: rgba(255,255,255,0.8);
-        margin-left: auto;
+        margin-left: 0;
     }
     .section-title {
         font-family: 'Google Sans', 'Roboto', sans-serif;
