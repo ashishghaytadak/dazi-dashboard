@@ -244,7 +244,6 @@ st.markdown("""
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="12" fill="white" font-weight="bold">G</text></svg>
         DAZI Paid Search Dashboard
     </div>
-    <div class="google-ads-subtitle">Floral Tie Campaign Performance — DAZI USA</div>
 </div>
 """, unsafe_allow_html=True)
 
