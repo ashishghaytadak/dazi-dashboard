@@ -424,21 +424,6 @@ with tab4:
     st.markdown("")
     st.markdown('<div class="section-title">Landing Page Preview</div>', unsafe_allow_html=True)
     st.markdown("The ads direct users to the DAZI floral ties collection page:")
-    st.markdown("""
-    <div style="background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dadce0;">
-        <div style="background: #333; color: #fff; padding: 14px 24px; display: flex; align-items: center; gap: 24px; font-size: 13px;">
-            <span style="font-size: 22px; font-weight: 700; letter-spacing: 0.05em; font-family: serif;">DAZI</span>
-            <span>NECKTIES</span><span>BOW TIES</span><span>SWATCHES</span><span>ACCESSORIES</span><span>NEW ARRIVALS</span><span>WEDDINGS</span>
-        </div>
-        <div style="padding: 24px; text-align: center;">
-            <div style="font-size: 12px; color: #888; margin-bottom: 8px;">Home > Floral > Page 1 of 2</div>
-            <div style="font-size: 24px; font-weight: 700; color: #333; margin-bottom: 20px;">FLORAL</div>
-            <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
-                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #f5e6e0, #e8d5c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌸</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Quicksand Roses</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">68 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
-                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0f0e0, #c8e8c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌿</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Hidden Garden</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">31 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
-                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0e5f0, #c8d5e8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">💐</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Scorpion Grass</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">2 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
-            </div>
-        </div>
-    </div>""", unsafe_allow_html=True)
+    st.image("/workspaces/dazi-dashboard/Floral.png", use_container_width=True)
     st.markdown("")
     st.caption("Landing page: www.daziusa.com/collections/floral — Products priced at $32.00 each")
