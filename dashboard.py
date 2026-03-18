@@ -29,6 +29,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════
+# HELPER: Convert Competition text to number for sorting
+# High=3, Medium=2, Low=1 so descending = High first
+# ═══════════════════════════════════════════════════════
+COMP_MAP = {"High": 3, "Medium": 2, "Low": 1}
+COMP_REVERSE = {3: "High", 2: "Medium", 1: "Low"}
+
+# ═══════════════════════════════════════════════════════
 # DATA
 # ═══════════════════════════════════════════════════════
 
@@ -49,40 +56,45 @@ adgroup_data = pd.DataFrame([
 ])
 
 keyword_report_data = pd.DataFrame([
-    {"Keyword": "necktie", "Competition": "High", "Top Bid": 1.80, "Avg Monthly": 100000, "CPC Bid": 2.30, "Quality Score": 7, "Impressions": 40657, "Top Imp. Rate": 0.644, "Clicks": 566, "CTR": 0.0139, "Avg CPC": 2.30, "Total Cost": 1301.80, "Conversions": 25, "Conv. Rate": 0.0442, "CPA": 52.07},
-    {"Keyword": "tie for suit", "Competition": "High", "Top Bid": 2.40, "Avg Monthly": 10000, "CPC Bid": 2.10, "Quality Score": 6, "Impressions": 2386, "Top Imp. Rate": 0.378, "Clicks": 19, "CTR": 0.0080, "Avg CPC": 2.10, "Total Cost": 39.90, "Conversions": 1, "Conv. Rate": 0.0526, "CPA": 39.90},
-    {"Keyword": "floral tie", "Competition": "High", "Top Bid": 1.71, "Avg Monthly": 9500, "CPC Bid": 2.10, "Quality Score": 10, "Impressions": 5303, "Top Imp. Rate": 0.884, "Clicks": 675, "CTR": 0.1273, "Avg CPC": 2.10, "Total Cost": 1417.50, "Conversions": 89, "Conv. Rate": 0.1319, "CPA": 15.93},
-    {"Keyword": "floral wedding tie", "Competition": "High", "Top Bid": 2.50, "Avg Monthly": 9000, "CPC Bid": 2.60, "Quality Score": 10, "Impressions": 4255, "Top Imp. Rate": 0.749, "Clicks": 459, "CTR": 0.1079, "Avg CPC": 2.60, "Total Cost": 1193.40, "Conversions": 83, "Conv. Rate": 0.1808, "CPA": 14.38},
-    {"Keyword": "floral necktie", "Competition": "High", "Top Bid": 1.88, "Avg Monthly": 8700, "CPC Bid": 2.10, "Quality Score": 9, "Impressions": 3976, "Top Imp. Rate": 0.724, "Clicks": 138, "CTR": 0.0347, "Avg CPC": 2.10, "Total Cost": 289.80, "Conversions": 23, "Conv. Rate": 0.1667, "CPA": 12.60},
-    {"Keyword": "pink floral tie", "Competition": "High", "Top Bid": 1.30, "Avg Monthly": 8500, "CPC Bid": 1.50, "Quality Score": 10, "Impressions": 4458, "Top Imp. Rate": 0.831, "Clicks": 533, "CTR": 0.1196, "Avg CPC": 1.50, "Total Cost": 799.50, "Conversions": 178, "Conv. Rate": 0.3340, "CPA": 4.49},
-    {"Keyword": "blue floral tie", "Competition": "High", "Top Bid": 0.95, "Avg Monthly": 7500, "CPC Bid": 1.20, "Quality Score": 10, "Impressions": 4306, "Top Imp. Rate": 0.909, "Clicks": 564, "CTR": 0.1310, "Avg CPC": 1.20, "Total Cost": 676.80, "Conversions": 141, "Conv. Rate": 0.2500, "CPA": 4.80},
-    {"Keyword": "tie for blue suit", "Competition": "High", "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 0.600, "Clicks": 5, "CTR": 0.0135, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "floral tie for sale", "Competition": "High", "Top Bid": 2.40, "Avg Monthly": 880, "CPC Bid": 2.60, "Quality Score": 9, "Impressions": 390, "Top Imp. Rate": 0.702, "Clicks": 13, "CTR": 0.0333, "Avg CPC": 2.60, "Total Cost": 33.80, "Conversions": 6, "Conv. Rate": 0.4615, "CPA": 5.63},
-    {"Keyword": "black and white floral tie", "Competition": "High", "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 0.610, "Clicks": 1, "CTR": 0.0217, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "unique floral tie", "Competition": "Medium", "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 0.758, "Clicks": 12, "CTR": 0.0448, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "red tie with black suit", "Competition": "Medium", "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 0.495, "Clicks": 2, "CTR": 0.0145, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "tie and handkerchief set", "Competition": "Medium", "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 0.446, "Clicks": 1, "CTR": 0.0081, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
-    {"Keyword": "how to tie a tie", "Competition": "Low", "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 0.648, "Clicks": 2863, "CTR": 0.0233, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": 0.0049, "CPA": 55.22},
-    {"Keyword": "best tie knot", "Competition": "Low", "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 0.480, "Clicks": 28, "CTR": 0.0171, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": 0.0357, "CPA": 2.80},
+    {"Keyword": "necktie", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 100000, "CPC Bid": 2.30, "Quality Score": 7, "Impressions": 40657, "Top Imp. Rate": 0.644, "Clicks": 566, "CTR": 0.0139, "Avg CPC": 2.30, "Total Cost": 1301.80, "Conversions": 25, "Conv. Rate": 0.0442, "CPA": 52.07},
+    {"Keyword": "tie for suit", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 10000, "CPC Bid": 2.10, "Quality Score": 6, "Impressions": 2386, "Top Imp. Rate": 0.378, "Clicks": 19, "CTR": 0.0080, "Avg CPC": 2.10, "Total Cost": 39.90, "Conversions": 1, "Conv. Rate": 0.0526, "CPA": 39.90},
+    {"Keyword": "floral tie", "Competition": 3, "Top Bid": 1.71, "Avg Monthly": 9500, "CPC Bid": 2.10, "Quality Score": 10, "Impressions": 5303, "Top Imp. Rate": 0.884, "Clicks": 675, "CTR": 0.1273, "Avg CPC": 2.10, "Total Cost": 1417.50, "Conversions": 89, "Conv. Rate": 0.1319, "CPA": 15.93},
+    {"Keyword": "floral wedding tie", "Competition": 3, "Top Bid": 2.50, "Avg Monthly": 9000, "CPC Bid": 2.60, "Quality Score": 10, "Impressions": 4255, "Top Imp. Rate": 0.749, "Clicks": 459, "CTR": 0.1079, "Avg CPC": 2.60, "Total Cost": 1193.40, "Conversions": 83, "Conv. Rate": 0.1808, "CPA": 14.38},
+    {"Keyword": "floral necktie", "Competition": 3, "Top Bid": 1.88, "Avg Monthly": 8700, "CPC Bid": 2.10, "Quality Score": 9, "Impressions": 3976, "Top Imp. Rate": 0.724, "Clicks": 138, "CTR": 0.0347, "Avg CPC": 2.10, "Total Cost": 289.80, "Conversions": 23, "Conv. Rate": 0.1667, "CPA": 12.60},
+    {"Keyword": "pink floral tie", "Competition": 3, "Top Bid": 1.30, "Avg Monthly": 8500, "CPC Bid": 1.50, "Quality Score": 10, "Impressions": 4458, "Top Imp. Rate": 0.831, "Clicks": 533, "CTR": 0.1196, "Avg CPC": 1.50, "Total Cost": 799.50, "Conversions": 178, "Conv. Rate": 0.3340, "CPA": 4.49},
+    {"Keyword": "blue floral tie", "Competition": 3, "Top Bid": 0.95, "Avg Monthly": 7500, "CPC Bid": 1.20, "Quality Score": 10, "Impressions": 4306, "Top Imp. Rate": 0.909, "Clicks": 564, "CTR": 0.1310, "Avg CPC": 1.20, "Total Cost": 676.80, "Conversions": 141, "Conv. Rate": 0.2500, "CPA": 4.80},
+    {"Keyword": "tie for blue suit", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 0.600, "Clicks": 5, "CTR": 0.0135, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "floral tie for sale", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 880, "CPC Bid": 2.60, "Quality Score": 9, "Impressions": 390, "Top Imp. Rate": 0.702, "Clicks": 13, "CTR": 0.0333, "Avg CPC": 2.60, "Total Cost": 33.80, "Conversions": 6, "Conv. Rate": 0.4615, "CPA": 5.63},
+    {"Keyword": "black and white floral tie", "Competition": 3, "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 0.610, "Clicks": 1, "CTR": 0.0217, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "unique floral tie", "Competition": 2, "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 0.758, "Clicks": 12, "CTR": 0.0448, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "red tie with black suit", "Competition": 2, "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 0.495, "Clicks": 2, "CTR": 0.0145, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 0.446, "Clicks": 1, "CTR": 0.0081, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": 0.0, "CPA": 0.0},
+    {"Keyword": "how to tie a tie", "Competition": 1, "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 0.648, "Clicks": 2863, "CTR": 0.0233, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": 0.0049, "CPA": 55.22},
+    {"Keyword": "best tie knot", "Competition": 1, "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 0.480, "Clicks": 28, "CTR": 0.0171, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": 0.0357, "CPA": 2.80},
 ])
 
+# Map numeric competition back to text for display
+keyword_report_data["Competition"] = keyword_report_data["Competition"].map(COMP_REVERSE)
+
 keyword_research_data = pd.DataFrame([
-    {"Keyword": "necktie", "Competition": "High", "Top of Page Bid": 1.80, "Avg Monthly Searches": 100000},
-    {"Keyword": "tie for suit", "Competition": "High", "Top of Page Bid": 2.40, "Avg Monthly Searches": 10000},
-    {"Keyword": "floral tie", "Competition": "High", "Top of Page Bid": 1.71, "Avg Monthly Searches": 9500},
-    {"Keyword": "floral wedding tie", "Competition": "High", "Top of Page Bid": 2.50, "Avg Monthly Searches": 9000},
-    {"Keyword": "floral necktie", "Competition": "High", "Top of Page Bid": 1.88, "Avg Monthly Searches": 8700},
-    {"Keyword": "pink floral tie", "Competition": "High", "Top of Page Bid": 1.30, "Avg Monthly Searches": 8500},
-    {"Keyword": "blue floral tie", "Competition": "High", "Top of Page Bid": 0.95, "Avg Monthly Searches": 7500},
-    {"Keyword": "tie for blue suit", "Competition": "High", "Top of Page Bid": 1.80, "Avg Monthly Searches": 980},
-    {"Keyword": "floral tie for sale", "Competition": "High", "Top of Page Bid": 2.40, "Avg Monthly Searches": 880},
-    {"Keyword": "black and white floral tie", "Competition": "High", "Top of Page Bid": 0.85, "Avg Monthly Searches": 120},
-    {"Keyword": "unique floral tie", "Competition": "Medium", "Top of Page Bid": 0.95, "Avg Monthly Searches": 700},
-    {"Keyword": "red tie with black suit", "Competition": "Medium", "Top of Page Bid": 0.65, "Avg Monthly Searches": 550},
-    {"Keyword": "tie and handkerchief set", "Competition": "Medium", "Top of Page Bid": 0.50, "Avg Monthly Searches": 550},
-    {"Keyword": "how to tie a tie", "Competition": "Low", "Top of Page Bid": 0.25, "Avg Monthly Searches": 500000},
-    {"Keyword": "best tie knot", "Competition": "Low", "Top of Page Bid": 0.10, "Avg Monthly Searches": 9000},
+    {"Keyword": "necktie", "Competition": 3, "Top of Page Bid": 1.80, "Avg Monthly Searches": 100000},
+    {"Keyword": "tie for suit", "Competition": 3, "Top of Page Bid": 2.40, "Avg Monthly Searches": 10000},
+    {"Keyword": "floral tie", "Competition": 3, "Top of Page Bid": 1.71, "Avg Monthly Searches": 9500},
+    {"Keyword": "floral wedding tie", "Competition": 3, "Top of Page Bid": 2.50, "Avg Monthly Searches": 9000},
+    {"Keyword": "floral necktie", "Competition": 3, "Top of Page Bid": 1.88, "Avg Monthly Searches": 8700},
+    {"Keyword": "pink floral tie", "Competition": 3, "Top of Page Bid": 1.30, "Avg Monthly Searches": 8500},
+    {"Keyword": "blue floral tie", "Competition": 3, "Top of Page Bid": 0.95, "Avg Monthly Searches": 7500},
+    {"Keyword": "tie for blue suit", "Competition": 3, "Top of Page Bid": 1.80, "Avg Monthly Searches": 980},
+    {"Keyword": "floral tie for sale", "Competition": 3, "Top of Page Bid": 2.40, "Avg Monthly Searches": 880},
+    {"Keyword": "black and white floral tie", "Competition": 3, "Top of Page Bid": 0.85, "Avg Monthly Searches": 120},
+    {"Keyword": "unique floral tie", "Competition": 2, "Top of Page Bid": 0.95, "Avg Monthly Searches": 700},
+    {"Keyword": "red tie with black suit", "Competition": 2, "Top of Page Bid": 0.65, "Avg Monthly Searches": 550},
+    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top of Page Bid": 0.50, "Avg Monthly Searches": 550},
+    {"Keyword": "how to tie a tie", "Competition": 1, "Top of Page Bid": 0.25, "Avg Monthly Searches": 500000},
+    {"Keyword": "best tie knot", "Competition": 1, "Top of Page Bid": 0.10, "Avg Monthly Searches": 9000},
 ])
+
+keyword_research_data["Competition"] = keyword_research_data["Competition"].map(COMP_REVERSE)
 
 
 # ═══════════════════════════════════════════════════════
@@ -188,6 +200,7 @@ with tab2:
 
     st.dataframe(keyword_report_data, use_container_width=True, hide_index=True, height=580,
         column_config={
+            "Competition": st.column_config.TextColumn(),
             "Top Bid": st.column_config.NumberColumn(format="$%.2f"),
             "Avg Monthly": st.column_config.NumberColumn(format="%d"),
             "CPC Bid": st.column_config.NumberColumn(format="$%.2f"),
@@ -233,6 +246,7 @@ with tab3:
 
     st.dataframe(keyword_research_data, use_container_width=True, hide_index=True,
         column_config={
+            "Competition": st.column_config.TextColumn(),
             "Top of Page Bid": st.column_config.NumberColumn(format="$%.2f"),
             "Avg Monthly Searches": st.column_config.NumberColumn(format="%d"),
         })
@@ -279,7 +293,7 @@ with tab4:
             <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
                 <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #f5e6e0, #e8d5c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌸</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Quicksand Roses</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">68 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
                 <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0f0e0, #c8e8c8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">🌿</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Hidden Garden</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">31 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
-                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0e5f0, #c8d5e8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">💐</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Scorpion Grass</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">2 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
+                <div style="text-align: center;"><div style="width: 180px; height: 180px; background: linear-gradient(135deg, #e0e5f0, #c8d5e8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;"><span style="font-size: 40px;">💐</span></div><div style="font-size: 14px; color: #333; font-weight: 600;">Scorpion Grass</div><div style="font-size: 12px; color: #f5a623;">★★★★★ <span style="color: #888;">31 reviews</span></div><div style="font-size: 16px; color: #333; font-weight: 700;">$32.00</div></div>
             </div>
         </div>
     </div>""", unsafe_allow_html=True)
