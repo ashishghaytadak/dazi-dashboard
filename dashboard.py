@@ -91,7 +91,7 @@ st.markdown("""
 COMP_REVERSE = {3: "High", 2: "Medium", 1: "Low"}
 
 # ═══════════════════════════════════════════════════════
-# DATA — percentages stored as actual % values (e.g., 94 not 0.94)
+# DATA — percentages already as whole numbers (94 not 0.94)
 # ═══════════════════════════════════════════════════════
 
 campaign_data = pd.DataFrame([
@@ -110,22 +110,23 @@ adgroup_data = pd.DataFrame([
     {"Campaign": "Wedding tie", "Ad Group": "Wedding tie", "Impressions": 47528, "Top Imp. Rate": 4.1, "Clicks": 495, "Avg CPC": 4.00, "Total Cost": 1980.00, "CTR": 1.0, "Conversions": 58, "Conv. Rate": 11.7, "Margin/Conv": 75, "CPA": 34.14, "POAS": 120.0},
 ])
 
+# Keyword Report — Conv. Rate and CPA as NUMBERS (None for 0 conversions)
 keyword_report_data = pd.DataFrame([
-    {"Keyword": "necktie", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 100000, "CPC Bid": 2.30, "Quality Score": 7, "Impressions": 40657, "Top Imp. Rate": 64.4, "Clicks": 566, "CTR": 1.4, "Avg CPC": 2.30, "Total Cost": 1301.80, "Conversions": 25, "Conv. Rate": "4.4%", "CPA": "$52.1"},
-    {"Keyword": "tie for suit", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 10000, "CPC Bid": 2.10, "Quality Score": 6, "Impressions": 2386, "Top Imp. Rate": 37.8, "Clicks": 19, "CTR": 0.8, "Avg CPC": 2.10, "Total Cost": 39.90, "Conversions": 1, "Conv. Rate": "5.3%", "CPA": "$39.9"},
-    {"Keyword": "floral tie", "Competition": 3, "Top Bid": 1.71, "Avg Monthly": 9500, "CPC Bid": 2.10, "Quality Score": 10, "Impressions": 5303, "Top Imp. Rate": 88.4, "Clicks": 675, "CTR": 12.7, "Avg CPC": 2.10, "Total Cost": 1417.50, "Conversions": 89, "Conv. Rate": "13.2%", "CPA": "$15.9"},
-    {"Keyword": "floral wedding tie", "Competition": 3, "Top Bid": 2.50, "Avg Monthly": 9000, "CPC Bid": 2.60, "Quality Score": 10, "Impressions": 4255, "Top Imp. Rate": 74.9, "Clicks": 459, "CTR": 10.8, "Avg CPC": 2.60, "Total Cost": 1193.40, "Conversions": 83, "Conv. Rate": "18.1%", "CPA": "$14.4"},
-    {"Keyword": "floral necktie", "Competition": 3, "Top Bid": 1.88, "Avg Monthly": 8700, "CPC Bid": 2.10, "Quality Score": 9, "Impressions": 3976, "Top Imp. Rate": 72.4, "Clicks": 138, "CTR": 3.5, "Avg CPC": 2.10, "Total Cost": 289.80, "Conversions": 23, "Conv. Rate": "16.7%", "CPA": "$12.6"},
-    {"Keyword": "pink floral tie", "Competition": 3, "Top Bid": 1.30, "Avg Monthly": 8500, "CPC Bid": 1.50, "Quality Score": 10, "Impressions": 4458, "Top Imp. Rate": 83.1, "Clicks": 533, "CTR": 12.0, "Avg CPC": 1.50, "Total Cost": 799.50, "Conversions": 178, "Conv. Rate": "33.4%", "CPA": "$4.5"},
-    {"Keyword": "blue floral tie", "Competition": 3, "Top Bid": 0.95, "Avg Monthly": 7500, "CPC Bid": 1.20, "Quality Score": 10, "Impressions": 4306, "Top Imp. Rate": 90.9, "Clicks": 564, "CTR": 13.1, "Avg CPC": 1.20, "Total Cost": 676.80, "Conversions": 141, "Conv. Rate": "25.0%", "CPA": "$4.8"},
-    {"Keyword": "tie for blue suit", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 60.0, "Clicks": 5, "CTR": 1.3, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": "-", "CPA": "-"},
-    {"Keyword": "floral tie for sale", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 880, "CPC Bid": 2.60, "Quality Score": 9, "Impressions": 390, "Top Imp. Rate": 70.2, "Clicks": 13, "CTR": 3.3, "Avg CPC": 2.60, "Total Cost": 33.80, "Conversions": 6, "Conv. Rate": "46.2%", "CPA": "$5.6"},
-    {"Keyword": "black and white floral tie", "Competition": 3, "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 61.0, "Clicks": 1, "CTR": 2.2, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": "-", "CPA": "-"},
-    {"Keyword": "unique floral tie", "Competition": 2, "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 75.8, "Clicks": 12, "CTR": 4.5, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": "-", "CPA": "-"},
-    {"Keyword": "red tie with black suit", "Competition": 2, "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 49.5, "Clicks": 2, "CTR": 1.4, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": "-", "CPA": "-"},
-    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 44.6, "Clicks": 1, "CTR": 0.8, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": "-", "CPA": "-"},
-    {"Keyword": "how to tie a tie", "Competition": 1, "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 64.8, "Clicks": 2863, "CTR": 2.3, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": "0.5%", "CPA": "$55.2"},
-    {"Keyword": "best tie knot", "Competition": 1, "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 48.0, "Clicks": 28, "CTR": 1.7, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": "3.6%", "CPA": "$2.8"},
+    {"Keyword": "necktie", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 100000, "CPC Bid": 2.30, "Quality Score": 7, "Impressions": 40657, "Top Imp. Rate": 64.4, "Clicks": 566, "CTR": 1.4, "Avg CPC": 2.30, "Total Cost": 1301.80, "Conversions": 25, "Conv. Rate": 4.4, "CPA": 52.07},
+    {"Keyword": "tie for suit", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 10000, "CPC Bid": 2.10, "Quality Score": 6, "Impressions": 2386, "Top Imp. Rate": 37.8, "Clicks": 19, "CTR": 0.8, "Avg CPC": 2.10, "Total Cost": 39.90, "Conversions": 1, "Conv. Rate": 5.3, "CPA": 39.90},
+    {"Keyword": "floral tie", "Competition": 3, "Top Bid": 1.71, "Avg Monthly": 9500, "CPC Bid": 2.10, "Quality Score": 10, "Impressions": 5303, "Top Imp. Rate": 88.4, "Clicks": 675, "CTR": 12.7, "Avg CPC": 2.10, "Total Cost": 1417.50, "Conversions": 89, "Conv. Rate": 13.2, "CPA": 15.93},
+    {"Keyword": "floral wedding tie", "Competition": 3, "Top Bid": 2.50, "Avg Monthly": 9000, "CPC Bid": 2.60, "Quality Score": 10, "Impressions": 4255, "Top Imp. Rate": 74.9, "Clicks": 459, "CTR": 10.8, "Avg CPC": 2.60, "Total Cost": 1193.40, "Conversions": 83, "Conv. Rate": 18.1, "CPA": 14.38},
+    {"Keyword": "floral necktie", "Competition": 3, "Top Bid": 1.88, "Avg Monthly": 8700, "CPC Bid": 2.10, "Quality Score": 9, "Impressions": 3976, "Top Imp. Rate": 72.4, "Clicks": 138, "CTR": 3.5, "Avg CPC": 2.10, "Total Cost": 289.80, "Conversions": 23, "Conv. Rate": 16.7, "CPA": 12.60},
+    {"Keyword": "pink floral tie", "Competition": 3, "Top Bid": 1.30, "Avg Monthly": 8500, "CPC Bid": 1.50, "Quality Score": 10, "Impressions": 4458, "Top Imp. Rate": 83.1, "Clicks": 533, "CTR": 12.0, "Avg CPC": 1.50, "Total Cost": 799.50, "Conversions": 178, "Conv. Rate": 33.4, "CPA": 4.49},
+    {"Keyword": "blue floral tie", "Competition": 3, "Top Bid": 0.95, "Avg Monthly": 7500, "CPC Bid": 1.20, "Quality Score": 10, "Impressions": 4306, "Top Imp. Rate": 90.9, "Clicks": 564, "CTR": 13.1, "Avg CPC": 1.20, "Total Cost": 676.80, "Conversions": 141, "Conv. Rate": 25.0, "CPA": 4.80},
+    {"Keyword": "tie for blue suit", "Competition": 3, "Top Bid": 1.80, "Avg Monthly": 980, "CPC Bid": 2.50, "Quality Score": 6, "Impressions": 371, "Top Imp. Rate": 60.0, "Clicks": 5, "CTR": 1.3, "Avg CPC": 2.50, "Total Cost": 12.50, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "floral tie for sale", "Competition": 3, "Top Bid": 2.40, "Avg Monthly": 880, "CPC Bid": 2.60, "Quality Score": 9, "Impressions": 390, "Top Imp. Rate": 70.2, "Clicks": 13, "CTR": 3.3, "Avg CPC": 2.60, "Total Cost": 33.80, "Conversions": 6, "Conv. Rate": 46.2, "CPA": 5.63},
+    {"Keyword": "black and white floral tie", "Competition": 3, "Top Bid": 0.85, "Avg Monthly": 120, "CPC Bid": 0.90, "Quality Score": 8, "Impressions": 46, "Top Imp. Rate": 61.0, "Clicks": 1, "CTR": 2.2, "Avg CPC": 0.90, "Total Cost": 0.90, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "unique floral tie", "Competition": 2, "Top Bid": 0.95, "Avg Monthly": 700, "CPC Bid": 1.00, "Quality Score": 8, "Impressions": 268, "Top Imp. Rate": 75.8, "Clicks": 12, "CTR": 4.5, "Avg CPC": 1.00, "Total Cost": 12.00, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "red tie with black suit", "Competition": 2, "Top Bid": 0.65, "Avg Monthly": 550, "CPC Bid": 0.715, "Quality Score": 5, "Impressions": 138, "Top Imp. Rate": 49.5, "Clicks": 2, "CTR": 1.4, "Avg CPC": 0.715, "Total Cost": 1.43, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "tie and handkerchief set", "Competition": 2, "Top Bid": 0.50, "Avg Monthly": 550, "CPC Bid": 0.62, "Quality Score": 4, "Impressions": 124, "Top Imp. Rate": 44.6, "Clicks": 1, "CTR": 0.8, "Avg CPC": 0.62, "Total Cost": 0.62, "Conversions": 0, "Conv. Rate": None, "CPA": None},
+    {"Keyword": "how to tie a tie", "Competition": 1, "Top Bid": 0.25, "Avg Monthly": 500000, "CPC Bid": 0.27, "Quality Score": 5, "Impressions": 122727, "Top Imp. Rate": 64.8, "Clicks": 2863, "CTR": 2.3, "Avg CPC": 0.27, "Total Cost": 773.01, "Conversions": 14, "Conv. Rate": 0.5, "CPA": 55.22},
+    {"Keyword": "best tie knot", "Competition": 1, "Top Bid": 0.10, "Avg Monthly": 9000, "CPC Bid": 0.10, "Quality Score": 4, "Impressions": 1636, "Top Imp. Rate": 48.0, "Clicks": 28, "CTR": 1.7, "Avg CPC": 0.10, "Total Cost": 2.80, "Conversions": 1, "Conv. Rate": 3.6, "CPA": 2.80},
 ])
 
 keyword_report_data["Competition"] = keyword_report_data["Competition"].map(COMP_REVERSE)
@@ -160,7 +161,6 @@ st.markdown("""
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10" fill="none" stroke="white" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-size="12" fill="white" font-weight="bold">G</text></svg>
         DAZI Paid Search Dashboard
     </div>
-    
 </div>
 """, unsafe_allow_html=True)
 
@@ -175,8 +175,6 @@ with tab1:
     total_clicks = campaign_data["Clicks"].sum()
     total_cost = campaign_data["Total Cost"].sum()
     total_conversions = campaign_data["Conversions"].sum()
-    overall_ctr = total_clicks / total_impressions * 100 if total_impressions > 0 else 0
-    overall_conv_rate = total_conversions / total_clicks * 100 if total_clicks > 0 else 0
     overall_cpa = total_cost / total_conversions if total_conversions > 0 else 0
     m1, m2, m3, m4, m5, m6 = st.columns(6)
     m1.metric("Total Budget", f"${total_budget:,}")
@@ -274,8 +272,8 @@ with tab2:
             "Avg CPC": st.column_config.NumberColumn(format="$%.2f"),
             "Total Cost": st.column_config.NumberColumn(format="$%,.0f"),
             "Conversions": st.column_config.NumberColumn(format="%d"),
-            "Conv. Rate": st.column_config.TextColumn(),
-            "CPA": st.column_config.TextColumn(),
+            "Conv. Rate": st.column_config.NumberColumn(format="%.1f%%"),
+            "CPA": st.column_config.NumberColumn(format="$%.2f"),
         })
     st.markdown("")
 
